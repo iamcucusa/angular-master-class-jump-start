@@ -1,4 +1,4 @@
-import { Contact } from '../../models/contact';
+import {Contact} from '../../models/contact';
 import {ContactsActions, ContactsActionTypes} from './contacts.actions';
 
 export interface ContactsState {
@@ -16,7 +16,8 @@ export function contactsReducer(state: ContactsState = INITIAL_STATE, action: Co
             return {
                 ...state, list: action.payload
             };
-    }
 
-    return state;
+        default :
+            return state;
+    }
 }

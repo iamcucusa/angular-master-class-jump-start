@@ -1,21 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ContactsService } from '../contacts.service';
-import { Contact } from '../models/contact';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {ContactsService} from '../contacts.service';
+import {Contact} from '../models/contact';
+import {select, Store} from '@ngrx/store';
+import {ApplicationState} from '../state/app.state';
+import {SelectContactAction} from '../state/contacts/contacts.actions';
+import {Observable} from 'rxjs/internal/Observable';
 
 @Component({
-  selector: 'trm-contacts-detail',
-  templateUrl: './contacts-detail.component.html',
-  styleUrls: ['./contacts-detail.component.css']
+    selector: 'trm-contacts-detail',
+    templateUrl: './contacts-detail.component.html',
+    styleUrls: ['./contacts-detail.component.css']
 })
 export class ContactsDetailComponent implements OnInit {
 
-  contact: Contact;
+    contact$: Observable<Contact>;
 
-  constructor(private contactsService: ContactsService, private route: ActivatedRoute) {}
+    constructor(private contactsService: ContactsService,
+                private route: ActivatedRoute,
+                private store: Store<ApplicationState>) {
+    }
 
-  ngOnInit() {
-    this.contactsService.getContact(this.route.snapshot.paramMap.get('id'))
-                        .subscribe(contact => this.contact = contact);
-  }
+    ngOnInit() {
+
+        const contactId = this.route.snapshot.paramMap.get('id');
+        this.store.dispatch(new SelectContactAction(+contactId));
+
+        this.contact$ = this.store.pipe(select(state => {
+            return state.contacts.list.find(contact =>
+                contact.id == state.contacts.selectedContactId);
+        }));
+    }
 }

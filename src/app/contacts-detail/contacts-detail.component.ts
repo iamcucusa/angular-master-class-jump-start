@@ -23,9 +23,6 @@ export class ContactsDetailComponent implements OnInit {
 
     ngOnInit() {
 
-        const contactId = this.route.snapshot.paramMap.get('id');
-        this.store.dispatch(new SelectContactAction(+contactId));
-
         this.contact$ = this.store.pipe(select(state => {
             return state.contacts.list.find(contact =>
                 contact.id == state.contacts.selectedContactId);

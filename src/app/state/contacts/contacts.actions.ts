@@ -3,8 +3,9 @@ import {Action} from '@ngrx/store';
 
 export enum ContactsActionTypes {
     LOAD_CONTACTS_SUCCESS = '[Contacts] Load success',
-    UPDATE_CONTACT = '[Contact] Update contact',
-    SELECT_CONTACT = '[Contact] Select contact'
+    UPDATE_CONTACT = '[Contacts] Update contact',
+    SELECT_CONTACT = '[Contacts] Select contact',
+    ADD_CONTACT = '[Contacts] Add Contact'
 }
 
 export class LoadContactsSuccessAction implements Action {
@@ -28,5 +29,11 @@ export class UpdateContactAction implements Action {
     }
 }
 
-export type ContactsActions = LoadContactsSuccessAction
+export class AddContactAction implements Action {
+    readonly type = ContactsActionTypes.ADD_CONTACT;
+
+    constructor(public payload: Contact) { }
+}
+
+export type ContactsActions = AddContactAction | LoadContactsSuccessAction
     | SelectContactAction | UpdateContactAction;
